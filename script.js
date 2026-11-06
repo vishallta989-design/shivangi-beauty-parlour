@@ -17,7 +17,8 @@ function initNavigation() {
     const navbar = document.getElementById('navbar');
 
     if (mobileMenuBtn && navLinks) {
-        mobileMenuBtn.addEventListener('click', () => {
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             navLinks.classList.toggle('show');
             const icon = mobileMenuBtn.querySelector('i');
             if (icon) {
@@ -26,10 +27,10 @@ function initNavigation() {
             }
         });
 
-        // Close nav links when a link is clicked on mobile
+        // Close nav links when a link is clicked on mobile / tablet
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
+                if (window.innerWidth <= 992) {
                     navLinks.classList.remove('show');
                     const icon = mobileMenuBtn.querySelector('i');
                     if (icon) {
@@ -38,6 +39,20 @@ function initNavigation() {
                     }
                 }
             });
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 992 && navLinks.classList.contains('show')) {
+                if (!navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    navLinks.classList.remove('show');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    if (icon) {
+                        icon.classList.add('fa-bars');
+                        icon.classList.remove('fa-xmark');
+                    }
+                }
+            }
         });
     }
 
